@@ -1,0 +1,43 @@
+<div class="gantt-v7-wrapper" id="ganttApp">
+    <div class="gantt-toolbar">
+        <button onclick="window.themDuAn()" class="btn-primary">+ THÊM DỰ ÁN MỚI</button>
+        <div class="filter-group">
+            <label><input type="checkbox" id="chkP" checked onchange="window.veBang()"> Project</label>
+            <label><input type="checkbox" id="chkT" checked onchange="window.veBang()"> Task</label>
+            <label><input type="checkbox" id="chkD" checked onchange="window.veBang()"> Detail</label>
+        </div>
+        <div class="nav-group">
+            <button onclick="window.doiThang(-1)" class="btn-nav">&laquo; Lùi</button>
+            <span id="labelThang" class="range-display"></span>
+            <button onclick="window.doiThang(1)" class="btn-nav">Tới &raquo;</button>
+        </div>
+    </div>
+
+    <div class="gantt-content">
+        <div class="side-left">
+            <table class="fixed-table">
+                <thead>
+                    <tr>
+                        <th style="width:70px">Detail</th>
+                        <th style="width:70px">Task</th>
+                        <th style="width:80px">ID.Proj</th>
+                        <th style="width:160px">Mô tả</th>
+                        <th style="width:80px">PIC</th>
+                        <th style="width:105px">From</th>
+                        <th style="width:105px">To</th>
+                        <th style="width:100px">Trạng thái</th>
+                        <th style="width:90px">Dự án</th>
+                        <th style="width:80px">Group/Team</th>
+                    </tr>
+                </thead>
+                <tbody id="vungDuLieu"></tbody>
+            </table>
+        </div>
+        <div class="side-right">
+            <table class="fixed-table gantt-grid">
+                <thead id="vungNgay"></thead>
+                <tbody id="vungGantt"></tbody>
+            </table>
+        </div>
+    </div>
+</div>

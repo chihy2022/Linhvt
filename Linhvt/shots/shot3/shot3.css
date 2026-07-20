@@ -1,0 +1,29 @@
+:root { --v7-border: #ddd; }
+.gantt-v7-wrapper { padding: 10px; background: #fff; font-family: Arial, sans-serif; }
+.gantt-toolbar { display: flex; align-items: center; justify-content: space-between; padding: 10px; background: #f8f9fa; border: 1px solid var(--v7-border); margin-bottom: 5px; }
+.filter-group { display: flex; gap: 15px; font-weight: bold; }
+.btn-primary { background: #28a745; color: #fff; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+.btn-nav { background: #555; color: #fff; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+.range-display { font-weight: bold; min-width: 160px; text-align: center; }
+
+.gantt-content { display: flex; border: 1px solid var(--v7-border); height: 500px; overflow: hidden; }
+.side-left { flex: 0 0 1010px; overflow: auto; border-right: 2px solid #888; }
+.side-right { flex: 1; overflow: auto; background: #fff; }
+
+.fixed-table { border-collapse: collapse; width: 100%; table-layout: fixed; }
+.fixed-table th, .fixed-table td { 
+    border: 1px solid var(--v7-border); padding: 0 5px; 
+    height: 40px !important; box-sizing: border-box; font-size: 12px;
+}
+.gantt-grid td { overflow: visible !important; padding: 0 !important; }
+
+/* Cố định 25px mỗi ngày */
+.day-cell { width: 25px !important; min-width: 25px !important; max-width: 25px !important; position: relative; font-size: 10px; }
+
+.bar { 
+    position: absolute; height: 24px; top: 8px; z-index: 5; 
+    border-radius: 4px; border: 1px solid rgba(0,0,0,0.15);
+    box-sizing: border-box; pointer-events: none;
+}
+input, select { height: 30px; width: 100%; border: none; background: transparent; outline: none; font-size: 12px;}
+.btn-plus { color: #fff; border: none; padding: 2px 6px; border-radius: 3px; cursor: pointer; font-weight: bold; }
