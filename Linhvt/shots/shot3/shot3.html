@@ -1,42 +1,62 @@
-<div class="gantt-v7-wrapper" id="ganttApp">
-    <div class="gantt-toolbar">
-        <button onclick="window.themDuAn()" class="btn-primary">+ Thêm dự án mới</button>
-        <div class="filter-group">
-            <label><input type="checkbox" id="chkP" checked onchange="window.veBang()"> Project</label>
-            <label><input type="checkbox" id="chkT" checked onchange="window.veBang()"> Task</label>
-            <label><input type="checkbox" id="chkD" checked onchange="window.veBang()"> Detail</label>
+<div class="body-shot gantt-v25-pro">
+    <!-- TOOLBAR CHÍNH -->
+    <div class="gt-header-bar">
+        <h2 class="shot-title">GANTT CHART PROJECT MANAGEMENT (E2E)</h2>
+        <div class="gt-actions">
+            <button id="btnAddG" class="gt-btn gt-btn-add">+ Thêm dự án</button>
+            <button id="btnSyncG" class="gt-btn gt-btn-sync">Sync Google Sheets</button>
         </div>
-        <div class="nav-group">
-            <button onclick="window.doiThang(-1)" class="btn-nav">&laquo; Lùi</button>
-            <span id="labelThang" class="range-display"></span>
-            <button onclick="window.doiThang(1)" class="btn-nav">Tới &raquo;</button>
+    </div>
+    
+    <!-- THANH ĐIỀU KHIỂN & BỘ LỌC -->
+    <div class="gt-controls-bar">
+        <div class="gt-filters">
+            <label><input type="checkbox" id="fP" checked onchange="renderGanttV25()"> Project</label>
+            <label><input type="checkbox" id="fT" checked onchange="renderGanttV25()"> Task</label>
+            <label><input type="checkbox" id="fD" checked onchange="renderGanttV25()"> Detail</label>
+        </div>
+        <div class="gt-nav-month">
+            <button onclick="changeGanttMonth(-1)" class="gt-btn-nav">&laquo; Lùi</button>
+            <span id="txtMonth" class="gt-month-label">Đang tải...</span>
+            <button onclick="changeGanttMonth(1)" class="gt-btn-nav">Tới &raquo;</button>
         </div>
     </div>
 
-    <div class="gantt-content">
-        <div class="side-left">
-            <table class="fixed-table">
+    <!-- KHU VỰC BẢNG CHIA LÀM 2 PHẦN -->
+    <div class="gt-main-container">
+        <!-- BÊN TRÁI: DỮ LIỆU CHI TIẾT (11 CỘT) -->
+        <div class="gt-side-left">
+            <table class="gt-table">
                 <thead>
                     <tr>
-                        <th style="width:70px">Detail</th>
-                        <th style="width:70px">Task</th>
-                        <th style="width:80px">ID.Proj</th>
-                        <th style="width:160px">Mô tả</th>
-                        <th style="width:80px">PIC</th>
-                        <th style="width:105px">From</th>
-                        <th style="width:105px">To</th>
-                        <th style="width:100px">Trạng thái</th>
-                        <th style="width:90px">Dự án</th>
-                        <th style="width:80px">Group/Team</th>
+                        <th class="w-dtl">DTL</th>
+                        <th class="w-tsk">TSK</th>
+                        <th class="w-id">ID</th>
+                        <th class="col-desc">MÔ TẢ DỰ ÁN / CÔNG VIỆC</th>
+                        <th class="w-pic">PIC</th>
+                        <th class="w-date">FROM</th>
+                        <th class="w-date">TO</th>
+                        <th class="w-stt">STATUS</th>
+                        <th class="w-prj">PRJ</th>
+                        <th class="w-grp">GROUP</th>
+                        <th class="w-tem">TEAM</th>
                     </tr>
                 </thead>
-                <tbody id="vungDuLieu"></tbody>
+                <tbody id="bodyLeft">
+                    <!-- Dữ liệu text nạp ở đây -->
+                </tbody>
             </table>
         </div>
-        <div class="side-right">
-            <table class="fixed-table gantt-grid">
-                <thead id="vungNgay"></thead>
-                <tbody id="vungGantt"></tbody>
+
+        <!-- BÊN PHẢI: BIỂU ĐỒ GANTT (TIMELINE) -->
+        <div class="gt-side-right">
+            <table class="gt-table">
+                <thead id="headRight">
+                    <!-- Header ngày tháng nạp ở đây -->
+                </thead>
+                <tbody id="bodyRight">
+                    <!-- Các thanh màu nạp ở đây -->
+                </tbody>
             </table>
         </div>
     </div>

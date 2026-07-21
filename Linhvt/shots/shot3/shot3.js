@@ -1,118 +1,134 @@
-const COLORS = {
-    "Open": "#ffff00", "Process": "#00ff00", "Deploy": "#c9daf8", "Pilot": "#ff9900",
-    "Done": "#00ffff", "Close": "#ead1dc", "Reopen": "#fff2cc", "Pending": "#f4cccc", "Reject": "#ea9999"
+const UI_COLORS = { "OPEN": "#fef08a", "PROCESS": "#86efac", "DEPLOY": "#bae6fd", "DONE": "#67e8f9", "REJECT": "#fca5a5", "CLOSE": "#e2e8f0", "PENDING": "#fecaca", "PILOT": "#fed7aa", "REOPEN": "#ffedd5" };
+
+window.ganttInit = async function() {
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbx-bOq4FKPXui0au2kL1hHuyWagTv1hPVP_BybDHgPJw6w95rLDSp0-wN-Faa2JHwhv/exec"; // THAY URL CỦA BẠN VÀO ĐÂY
+    window.gMonthOff = 0;
+    
+    try {
+        const res = await fetch(`${GAS_URL}?t=${Date.now()}`);
+        const raw = await res.json();
+        // PHÂN LOẠI DỮ LIỆU ĐỂ FILTER
+        window.gData = raw.map(r => {
+            let type = 'project';
+            if (r[0] && r[0].toString().trim() !== "") type = 'detail';
+            else if (r[1] && r[1].toString().trim() !== "") type = 'task';
+            return { 
+                detailId: r[0], taskId: r[1], projectId: r[2], desc: r[3], pic: r[4], 
+                from: r[5], to: r[6], status: (r[7]||"Open").toUpperCase(), 
+                project: r[8], group: r[9], team: r[10], type: type 
+            };
+        });
+        renderGanttV25();
+    } catch (e) { console.error("Lỗi nạp dữ liệu:", e); }
+
+    document.getElementById('btnAddG').onclick = () => {
+        const id = "P" + (window.gData.filter(x=>x.type==='project').length + 1);
+        window.gData.push({ projectId: id, desc: "Dự án mới", pic: "Linh", from: "2026-08-01", to: "2026-08-10", status: "OPEN", type:"project", project: "Unilever", group: "Group 1", team: "Ms Giang" });
+        renderGanttV25();
+    };
+    document.getElementById('btnSyncG').onclick = () => syncGanttV25(GAS_URL);
 };
 
-let database = [];
-let rangeOffset = 0;
-const colWidth = 25; 
+function renderGanttV25() {
+    const bLeft = document.getElementById('bodyLeft'), bRight = document.getElementById('bodyRight'), hRight = document.getElementById('headRight');
+    if (!bLeft || !bRight) return;
 
-window.veBang = function() {
-    const sP = document.getElementById('chkP').checked;
-    const sT = document.getElementById('chkT').checked;
-    const sD = document.getElementById('chkD').checked;
-
-    // Tính toán khung thời gian hiển thị (tháng hiện tại)
     const today = new Date();
-    const startRange = new Date(today.getFullYear(), today.getMonth() + rangeOffset, 1);
-    const endRange = new Date(startRange.getFullYear(), startRange.getMonth() + 1, 0);
-    const totalDays = endRange.getDate();
+    const startM = new Date(today.getFullYear(), today.getMonth() + window.gMonthOff, 1);
+    const endM = new Date(startM.getFullYear(), startM.getMonth() + 1, 0);
+    const daysCount = endM.getDate();
+    startM.setHours(0,0,0,0);
 
-    document.getElementById('labelThang').textContent = `Tháng ${startRange.getMonth()+1}/${startRange.getFullYear()}`;
+    document.getElementById('txtMonth').innerText = `THÁNG ${startM.getMonth()+1} / ${startM.getFullYear()}`;
 
-    // Header Ngày
-    const vungNgay = document.getElementById('vungNgay');
-    let hNgay = `<tr><th colspan="${totalDays}" style="background:#eee">Tháng ${startRange.getMonth()+1}</th></tr><tr>`;
-    for(let i=1; i<=totalDays; i++) hNgay += `<th class="day-cell">${i<10?'0'+i:i}</th>`;
-    vungNgay.innerHTML = hNgay + "</tr>";
+    // Vẽ Header Timeline
+    hRight.innerHTML = `<tr><th colspan="${daysCount}">TIMELINE GANTT CHART (18px/Day)</th></tr><tr>` + Array.from({length: daysCount}, (_, i) => `<th class="day-col">${i+1}</th>`).join('') + `</tr>`;
 
-    const vungDuLieu = document.getElementById('vungDuLieu');
-    const vungGantt = document.getElementById('vungGantt');
-    vungDuLieu.innerHTML = ""; vungGantt.innerHTML = "";
+    const fP = document.getElementById('fP').checked, fT = document.getElementById('fT').checked, fD = document.getElementById('fD').checked;
+    let htmlL = "", htmlR = "";
 
-    database.forEach((item, index) => {
-        if (item.type === 'project' && !sP) return;
-        if (item.type === 'task' && !sT) return;
-        if (item.type === 'detail' && !sD) return;
-
-        // Vẽ cột trái
-        const trD = document.createElement('tr');
-        trD.innerHTML = `
-            <td>${item.type==='detail' ? item.detailId : (item.type==='task' ? `<button onclick="window.themDetail('${item.taskId}')" class="btn-plus" style="background:#6f42c1">+D</button>` : '')}</td>
-            <td>${item.type!=='project' ? item.taskId : `<button onclick="window.themTask('${item.projectId}')" class="btn-plus" style="background:#007bff">+T</button>`}</td>
-            <td style="font-weight:bold">${item.projectId}</td>
-            <td><input type="text" value="${item.desc}" oninput="window.update(${index},'desc',this.value)"></td>
-            <td><select onchange="window.update(${index},'pic',this.value)"><option ${item.pic==='Linh'?'selected':''}>Linh</option><option ${item.pic==='Kiệt'?'selected':''}>Kiệt</option></select></td>
-            <td><input type="date" value="${item.from}" onchange="window.update(${index},'from',this.value)"></td>
-            <td><input type="date" value="${item.to}" onchange="window.update(${index},'to',this.value)"></td>
-            <td style="background:${COLORS[item.status]}">${taoSelectStatus(item.status, index)}</td>
-            <td>Unilever</td><td>Group 1</td>
-        `;
-        vungDuLieu.appendChild(trD);
-
-        // Vẽ Gantt (Xử lý xuyên tháng)
-        const trG = document.createElement('tr');
-        for (let i = 0; i < totalDays; i++) trG.innerHTML += `<td class="day-cell"></td>`;
+    window.gData.forEach((item, idx) => {
+        // BỘ LỌC
+        if (item.type === 'project' && !fP) return;
+        if (item.type === 'task' && !fT) return;
+        if (item.type === 'detail' && !fD) return;
         
-        if (item.from && item.to) {
-            const dS = new Date(item.from + "T00:00:00"); 
-            const dE = new Date(item.to + "T00:00:00");
-            
-            // Logic Clipping: Cắt ngày dự án theo khung nhìn của tháng
-            const clipStart = dS < startRange ? startRange : dS;
-            const clipEnd = dE > endRange ? endRange : dE;
+        const indent = item.type==='task'?'ind-1':(item.type==='detail'?'ind-2':'');
+        const btnT = (item.type === 'project') ? `<button onclick="window.addT('${item.projectId}')" class="btn-plus">+T</button>` : '';
+        const btnD = (item.type === 'task') ? `<button onclick="window.addD('${item.taskId}')" class="btn-plus" style="background:#8b5cf6">+D</button>` : '';
+        
+        // BẢNG TRÁI: DỮ LIỆU
+        htmlL += `<tr>
+            <td class="w-dtl">${item.detailId || btnD}</td><td class="w-tsk">${item.taskId || btnT}</td><td class="w-id">${item.projectId}</td>
+            <td contenteditable="true" onblur="upG(${idx},'desc',this)" class="col-desc ${indent}">${item.desc}</td>
+            <td contenteditable="true" onblur="upG(${idx},'pic',this)" class="w-pic">${item.pic || ''}</td>
+            <td contenteditable="true" onblur="upG(${idx},'from',this)" class="w-date">${fixDateV25(item.from)}</td>
+            <td contenteditable="true" onblur="upG(${idx},'to',this)" class="w-date">${fixDateV25(item.to)}</td>
+            <td class="w-stt"><span class="st-badge" style="background:${UI_COLORS[item.status]||'#eee'}" contenteditable="true" onblur="upG(${idx},'status',this)">${item.status}</span></td>
+            <td class="w-prj">${item.project || ''}</td>
+            <td class="w-grp" contenteditable="true" onblur="upG(${idx},'group',this)">${item.group || ''}</td>
+            <td class="w-tem" contenteditable="true" onblur="upG(${idx},'team',this)">${item.team || ''}</td>
+        </tr>`;
 
-            if (clipStart <= clipEnd) {
-                // Tính vị trí bắt đầu (index ngày 0 -> 30)
-                const startIdx = Math.floor((clipStart - startRange) / (1000 * 60 * 60 * 24));
-                // Tính số ngày hiển thị trong tháng này
-                const duration = Math.floor((clipEnd - clipStart) / (1000 * 60 * 60 * 24)) + 1;
-                
-                const bar = document.createElement('div');
-                bar.className = "bar";
-                bar.style.backgroundColor = COLORS[item.status] || "#ccc";
-                bar.style.left = (startIdx * colWidth) + "px";
-                bar.style.width = (duration * colWidth) + "px";
-                
-                trG.cells[0].appendChild(bar);
-            }
+        // BẢNG PHẢI: GANTT BAR
+        const dS = new Date(fixDateV25(item.from)); const dE = new Date(fixDateV25(item.to));
+        dS.setHours(0,0,0,0); dE.setHours(0,0,0,0);
+        const clipS = dS < startM ? startM : dS; const clipE = dE > endM ? endM : dE;
+        let startIdx = -1, dur = 0;
+        if (clipS <= clipE && clipE >= startM && clipS <= endM) {
+            startIdx = Math.floor((clipS - startM) / 86400000);
+            dur = Math.floor((clipE - clipS) / 86400000) + 1;
         }
-        vungGantt.appendChild(trG);
+        let cells = "";
+        for(let i=0; i<daysCount; i++) {
+            let bar = (i === startIdx) ? `<div class="gt-bar" style="background:${UI_COLORS[item.status]||'#cbd5e1'}; width:${dur*18-2}px"></div>` : "";
+            cells += `<td class="day-col" style="position:relative; overflow:visible">${bar}</td>`;
+        }
+        htmlR += `<tr>${cells}</tr>`;
     });
-};
 
-function taoSelectStatus(current, idx) {
-    let h = `<select onchange="window.update(${idx},'status',this.value)">`;
-    Object.keys(COLORS).forEach(s => h += `<option value="${s}" ${s===current?'selected':''}>${s}</option>`);
-    return h + `</select>`;
+    bLeft.innerHTML = htmlL;
+    bRight.innerHTML = htmlR;
 }
 
-window.doiThang = (n) => { rangeOffset += n; window.veBang(); };
-window.update = (idx, f, v) => { database[idx][f] = v; window.veBang(); };
+function fixDateV25(s) { if(!s) return ""; let c = s.toString().split('T')[0]; let d = new Date(c); return isNaN(d.getTime()) ? s : `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
 
-window.themDuAn = () => {
-    const id = "P" + (database.filter(x => x.type === 'project').length + 1);
-    const d = new Date();
-    const fromStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-01`;
-    const toStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-10`;
-    database.push({ projectId: id, taskId: '', detailId: '', type: 'project', desc: 'Dự án mới', pic: 'Linh', from: fromStr, to: toStr, status: 'Open' });
-    window.veBang();
+window.upG = (i, f, el) => { 
+    window.gData[i][f] = el.innerText.trim(); 
+    if(f==='status') window.gData[i][f] = window.gData[i][f].toUpperCase();
+    if(['status','from','to'].includes(f)) renderGanttV25(); 
 };
 
-window.themTask = (pid) => {
-    const p = database.find(x => x.projectId === pid);
-    const count = database.filter(x => x.projectId === pid && x.type === 'task').length + 1;
-    const idx = database.map(x => x.projectId).lastIndexOf(pid);
-    database.splice(idx + 1, 0, { ...p, type: 'task', taskId: pid + "_T" + count, desc: 'Task mới' });
-    window.veBang();
+window.changeGanttMonth = (n) => { window.gMonthOff += n; renderGanttV25(); };
+
+window.addT = (pid) => {
+    const p = window.gData.find(x => x.projectId === pid && x.type === 'project');
+    const c = window.gData.filter(x => x.projectId === pid && x.type === 'task').length + 1;
+    const idx = window.gData.findLastIndex(x => x.projectId === pid);
+    window.gData.splice(idx+1, 0, {...p, type: 'task', taskId: pid+"_T"+c, detailId:"", desc: "Task mới"});
+    renderGanttV25();
 };
 
-window.themDetail = (tid) => {
-    const t = database.find(x => x.taskId === tid);
-    const count = database.filter(x => x.taskId === tid && x.type === 'detail').length + 1;
-    const idx = database.map(x => x.taskId).lastIndexOf(tid);
-    database.splice(idx + 1, 0, { ...t, type: 'detail', detailId: tid + "_D" + count, desc: 'Detail mới' });
-    window.veBang();
+window.addD = (tid) => {
+    const p = window.gData.find(x => x.taskId === tid && x.type === 'task');
+    const c = window.gData.filter(x => x.taskId === tid && x.type === 'detail').length + 1;
+    const idx = window.gData.findLastIndex(x => x.taskId === tid);
+    window.gData.splice(idx+1, 0, {...p, type: 'detail', detailId: tid+"_D"+c, desc: "Detail mới"});
+    renderGanttV25();
 };
 
-setTimeout(() => { if(document.getElementById('vungDuLieu')) window.themDuAn(); }, 300);
+async function syncGanttV25(url) {
+    if (prompt("Mật khẩu SYNC:") !== "LINHVTsync") return alert("Wrong!");
+    const btn = document.getElementById('btnSyncG'); btn.innerText = "Syncing...";
+    // CHUẨN BỊ ĐÚNG 11 CỘT ĐỂ GỬI LÊN GS
+    const cleanData = window.gData.map(d => ({
+        detailId: d.detailId||"", taskId: d.taskId||"", projectId: d.projectId||"", desc: d.desc||"", pic: d.pic||"", from: d.from||"", to: d.to||"", status: d.status||"Open", project: d.project||"", group: d.group||"", team: d.team||""
+    }));
+    try {
+        await fetch(url, { method: "POST", mode: 'no-cors', body: JSON.stringify({ type: "UPDATE_ALL", data: cleanData }) });
+        alert("Thành công! Google Sheet đã được cập nhật.");
+    } catch (e) { alert("Lỗi kết nối!"); }
+    btn.innerText = "Sync Google Sheets";
+}
+
+window.ganttInit();
