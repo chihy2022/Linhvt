@@ -7,7 +7,7 @@ const COLORS_V37 = {
 const STATUS_OPTS = ["OPEN", "PROCESS", "DEPLOY", "DONE", "REJECT", "CLOSE", "PENDING", "PILOT", "REOPEN"];
 
 // LINK APPS SCRIPT CỦA BẠN
-const GAS_API_URL = "https://script.google.com/macros/s/AKfycbwrRwwu2d7czYwQKr8lsL16sJgbPTLs-13tfTCevdZ4B7ITPgp-ZYD7s3sZ79UHadYI/exec";
+const GAS_API_URL = "https://script.google.com/macros/s/AKfycbzBXqHhnG7baAmLxYksJlL_bWqQKbC_Vg1SZ6lS2ZgHYVzaKNM4qfBYN3siac-IpENK/exec";
 
 window.ganttInit = async function() {
     window.gMonthOff = 0; // Biến lùi tới tháng
