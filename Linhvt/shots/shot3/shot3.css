@@ -17,8 +17,7 @@
 .gt-table-fixed { width: 100%; border-collapse: collapse; table-layout: fixed; }
 .gt-table-fixed th, .gt-table-fixed td { height: var(--row-h) !important; box-sizing: border-box; border: 1px solid var(--p-border); padding: 0 6px !important; vertical-align: middle; }
 .gt-table-fixed th { background: #e2eef9; color: #1a4e8a; font-size: 9px; text-align: center; position: sticky; top: 0; z-index: 10; }
-.gt-super-head { background: #1a4e8a !important; color: #fff !important; font-size: 11px !important; font-weight: 800 !important; }
-
+.gt-super-head { background: #1a4e8a !important; color: #fff !important; font-size: 11px !important; font-weight: 800 !important; }.status-select { width: 100%; height: 22px; border: 1px solid rgba(0,0,0,0.1); border-radius: 12px; font-size: 9px; font-weight: 800; cursor: pointer; text-align: center; appearance: none; }
 .day-col { width: 18px !important; min-width: 18px !important; text-align: center !important; font-size: 9px; border-right: 1px solid #f1f5f9 !important; }
 .gt-cell-rel { position: relative; overflow: visible !important; padding: 0 !important; }
 .st-badge { display: inline-block; padding: 2px 6px; border-radius: 10px; font-size: 9px; font-weight: 800; text-transform: uppercase; }
@@ -63,4 +62,38 @@
     vertical-align: middle;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+/* --- STYLE CHO DROPDOWN STATUS (DẠNG BADGE/PILL) --- */
+.status-select {
+    width: 100%;
+    height: 22px;               /* Chiều cao gọn gàng trong hàng 32px */
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 12px;        /* Bo tròn dạng viên thuốc */
+    font-size: 9px;
+    font-weight: 700;
+    text-align: center;         /* Canh giữa chữ */
+    text-align-last: center;    /* Canh giữa chữ cho các trình duyệt đặc thù */
+    text-transform: uppercase;  /* Viết hoa toàn bộ cho chuyên nghiệp */
+    cursor: pointer;
+    outline: none;
+    appearance: none;           /* Ẩn mũi tên mặc định của Windows/Chrome */
+    -webkit-appearance: none;   /* Ẩn mũi tên trên Safari/Chrome */
+    -moz-appearance: none;      /* Ẩn mũi tên trên Firefox */
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+/* Hiệu ứng khi di chuột vào ô Status */
+.status-select:hover {
+    filter: brightness(0.9);    /* Tối màu lại một chút khi hover */
+    border-color: rgba(0,0,0,0.2);
+}
+
+/* Style cho danh sách các lựa chọn bên trong (khi bấm mở ra) */
+.status-select option {
+    background-color: #ffffff;  /* Nền trắng cho danh sách sổ xuống */
+    color: #333333;             /* Chữ đen rõ ràng */
+    font-weight: normal;
+    text-transform: none;       /* Trở về chữ thường trong menu cho dễ đọc */
 }
