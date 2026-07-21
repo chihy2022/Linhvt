@@ -102,7 +102,7 @@ function renderGanttV37() {
             <td contenteditable="true" onblur="upV37(${idx},'pic',this)">${item.pic || ''}</td>
             <td contenteditable="true" onblur="upV37(${idx},'from',this)" style="text-align:center">${fixV37(item.from)}</td>
             <td contenteditable="true" onblur="upV37(${idx},'to',this)" style="text-align:center">${fixV37(item.to)}</td>
-            <td style="text-align:center"><span class="st-badge" style="background:${COLORS_V37[item.status]||'#eee'}" contenteditable="true" onblur="upV37(${idx},'status',this)">${item.status}</span></td>
+            <td><span class="st-badge" style="background:${COLORS_V37[item.status]||'#eee'}" contenteditable="true" onblur="upV37(${idx},'status',this)">${item.status}</span></td>
             <td contenteditable="true" onblur="upV37(${idx},'project',this)">${item.project || ''}</td>
             <td contenteditable="true" onblur="upV37(${idx},'group',this)">${item.group || ''}</td>
             <td contenteditable="true" onblur="upV37(${idx},'team',this)">${item.team || ''}</td>
@@ -132,6 +132,27 @@ function renderGanttV37() {
 
     bLeft.innerHTML = htmlL;
     bRight.innerHTML = htmlR;
+
+    // THÊM DÒNG NÀY VÀO CUỐI HÀM
+    setTimeout(syncRowHeights, 50); 
+}
+
+// Hàm này cực kỳ quan trọng để bảng trái và phải không bị lệch khi chữ xuống dòng
+function syncRowHeights() {
+    const leftRows = document.querySelectorAll('#bodyLeft tr');
+    const rightRows = document.querySelectorAll('#bodyRight tr');
+    leftRows.forEach((row, i) => {
+        if (rightRows[i]) {
+            // Reset chiều cao về tự nhiên để đo
+            leftRows[i].style.height = 'auto';
+            rightRows[i].style.height = 'auto';
+            // Lấy chiều cao lớn nhất giữa 2 hàng tương ứng
+            const maxH = Math.max(row.offsetHeight, rightRows[i].offsetHeight);
+            // Ép cả 2 hàng cao bằng nhau
+            leftRows[i].style.height = maxH + 'px';
+            rightRows[i].style.height = maxH + 'px';
+        }
+    });
 }
 
 // 3. CÁC HÀM TIỆN ÍCH & THAO TÁC

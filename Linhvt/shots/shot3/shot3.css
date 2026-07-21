@@ -17,14 +17,50 @@
 .gt-table-fixed { width: 100%; border-collapse: collapse; table-layout: fixed; }
 .gt-table-fixed th, .gt-table-fixed td { height: var(--row-h) !important; box-sizing: border-box; border: 1px solid var(--p-border); padding: 0 6px !important; vertical-align: middle; }
 .gt-table-fixed th { background: #e2eef9; color: #1a4e8a; font-size: 9px; text-align: center; position: sticky; top: 0; z-index: 10; }
-.gt-table-fixed td { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left; }
 .gt-super-head { background: #1a4e8a !important; color: #fff !important; font-size: 11px !important; font-weight: 800 !important; }
 
-.col-desc-flex { width: auto; font-weight: 500; color: #000; }
 .day-col { width: 18px !important; min-width: 18px !important; text-align: center !important; font-size: 9px; border-right: 1px solid #f1f5f9 !important; }
 .gt-cell-rel { position: relative; overflow: visible !important; padding: 0 !important; }
-.gt-bar { position: absolute; height: 16px; top: 8px; border-radius: 10px; z-index: 5; border: 1px solid rgba(255,255,255,0.4); pointer-events: none; }
 .st-badge { display: inline-block; padding: 2px 6px; border-radius: 10px; font-size: 9px; font-weight: 800; text-transform: uppercase; }
 .ind-1 { border-left: 4px solid #3b82f6 !important; padding-left: 12px !important; font-weight: 600; color: #1e40af; }
 .ind-2 { padding-left: 30px !important; font-style: italic; color: #64748b; }
 .btn-plus { background: #1a4e8a; color: #fff; border: none; padding: 1px 4px; border-radius: 3px; font-size: 8px; cursor: pointer; }
+
+
+/* Đảm bảo thanh bar luôn nằm giữa hàng dù hàng có cao lên */
+.gt-bar { 
+    position: absolute; 
+    height: 16px; 
+    top: 50%; /* Căn giữa theo chiều dọc */
+    transform: translateY(-50%); 
+    border-radius: 10px; 
+    z-index: 5; 
+    border: 1px solid rgba(255,255,255,0.4); 
+    pointer-events: none; 
+}
+
+/* Ép bảng luôn rộng 100% màn hình */
+.gt-table-fixed { 
+    width: 100%; 
+    border-collapse: collapse; 
+    table-layout: fixed; /* Bắt buộc để colgroup hoạt động */
+}
+
+/* Cho phép xuống dòng ở cột mô tả */
+.col-desc-flex { 
+    white-space: normal !important; 
+    word-wrap: break-word; 
+    line-height: 1.4 !important;
+    text-align: left !important;
+}
+
+/* Các ô khác giữ nguyên để không bị lệch hàng */
+.gt-table-fixed td { 
+    border: 1px solid var(--p-border);
+    height: auto !important; 
+    min-height: 32px;
+    padding: 4px 6px !important;
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
