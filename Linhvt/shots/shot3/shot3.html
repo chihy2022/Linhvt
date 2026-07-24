@@ -15,9 +15,9 @@
     </div>
     <div class="gt-nav-month">
         <!-- Đổi tên hàm thành changeMonthV37 -->
-        <button onclick="window.changeMonthV37(-1)" class="gt-btn-nav">&laquo; Lùi</button>
+        <button onclick="window.changeMonthV37(-1)" class="gt-btn-nav">&laquo; Pre</button>
         <span id="txtMonth" class="gt-month-label">Đang tải...</span>
-        <button onclick="window.changeMonthV37(1)" class="gt-btn-nav">Tới &raquo;</button>
+        <button onclick="window.changeMonthV37(1)" class="gt-btn-nav">Next &raquo;</button>
     </div>
 </div>
 
@@ -28,13 +28,13 @@
             <table class="gt-table-fixed">
                 <!-- ĐÂY LÀ CHÌA KHÓA: Ép độ rộng từng cột từ đầu -->
                 <colgroup>
-                    <col style="width: 100px;"> <!-- DTL -->
-                    <col style="width: 75px;"> <!-- TSK -->
-                    <col style="width: 50px;"> <!-- ID -->
-                    <col>                      <!-- MÔ TẢ (Không để width để nó tự dãn) -->
+                    <col style="width: 70px;text-align: right;"> <!-- DTL -->
+                    <col style="width: 50px;text-align: right;"> <!-- TSK -->
+                    <col style="width: 50px;text-align: right;"> <!-- ID -->
+                    <col style="width: 300px;"> <!-- DESC -->
                     <col style="width: 70px;"> <!-- PIC -->
-                    <col style="width: 85px;"> <!-- FROM -->
-                    <col style="width: 85px;"> <!-- TO -->
+                    <col style="width: 90px;"> <!-- FROM -->
+                    <col style="width: 90px;"> <!-- TO -->
                     <col style="width: 90px;"> <!-- STATUS -->
                     <col style="width: 80px;"> <!-- PRJ -->
                     <col style="width: 70px;"> <!-- GROUP -->
@@ -44,12 +44,12 @@
                     <tr><th colspan="11" class="gt-super-head">THÔNG TIN CHI TIẾT DỰ ÁN</th></tr>
                     <tr>
                         <th>DTL</th><th>TSK</th><th>ID</th>
-                        <th class="col-desc-flex">MÔ TẢ CÔNG VIỆC</th>
+                        <th>MÔ TẢ CÔNG VIỆC</th>
                         <th>PIC</th><th>FROM</th><th>TO</th><th>STATUS</th>
                         <th>PRJ</th><th>GROUP</th><th>TEAM</th>
                     </tr>
                 </thead>
-                <tbody id="bodyLeft"></tbody>
+                <tbody id="bodyLeft" style="font-size: 9px;"></tbody>
             </table>
         </div>
 

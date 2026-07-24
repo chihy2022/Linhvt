@@ -82,7 +82,7 @@ function renderGanttV37() {
     window.gData.forEach((item, idx) => {
         if ((item.type==='project' && !fP) || (item.type==='task' && !fT) || (item.type==='detail' && !fD)) return;
         
-        const indent = item.type==='task' ? 'ind-1' : (item.type==='detail' ? 'ind-2' : '');
+        const indent = item.type==='project' ? 'ind-1' : (item.type==='detail' ? 'ind-2' : '');
         
         // FIX: Tên hàm gọi trong HTML phải khớp với window.addT37/addD37
         const btnT = (item.type === 'project') 
@@ -90,7 +90,7 @@ function renderGanttV37() {
             : (item.task || '');
 
         const btnD = (item.type === 'task') 
-            ? `<button onclick="window.addD37('${item.task}')" class="btn-plus" style="background:#8b5cf6">+D</button>` 
+            ? `<button onclick="window.addD37('${item.task}')" class="btn-plus" style="background:#64748b">+D</button>` 
             : (item.detail || '');
         
         let selectHtml = `<select class="status-select" style="background:${COLORS_V37[item.status]||'#eee'}" onchange="window.upSt37(${idx},this.value)">`;
@@ -100,14 +100,14 @@ function renderGanttV37() {
         selectHtml += `</select>`;
 
         htmlL += `<tr>
-            <td style="text-align:center">${btnD}</td>
-            <td style="text-align:center">${btnT}</td>
-            <td style="text-align:center; font-weight:700">${item.id}</td>
+            <td style="text-align:right;font-size:7px">${btnD}</td>
+            <td style="text-align:right;font-size:7px">${btnT}</td>
+            <td style="text-align:center;font-size:7px">${item.id}</td>
             <td contenteditable="true" onblur="window.upV37(${idx},'desc',this)" class="${indent}">${item.desc}</td>
-            <td contenteditable="true" onblur="window.upV37(${idx},'pic',this)">${item.pic || ''}</td>
+            <td contenteditable="true" onblur="window.upV37(${idx},'pic',this)"style="font-size:7px">${item.pic || ''}</td>
             <td contenteditable="true" onblur="window.upV37(${idx},'from',this)" style="text-align:center">${fixV37(item.from)}</td>
             <td contenteditable="true" onblur="window.upV37(${idx},'to',this)" style="text-align:center">${fixV37(item.to)}</td>
-            <td>${selectHtml}</td>
+            <td >${selectHtml}</td>
             <td contenteditable="true" onblur="window.upV37(${idx},'project',this)">${item.project || ''}</td>
             <td contenteditable="true" onblur="window.upV37(${idx},'group',this)">${item.group || ''}</td>
             <td contenteditable="true" onblur="window.upV37(${idx},'team',this)">${item.team || ''}</td>

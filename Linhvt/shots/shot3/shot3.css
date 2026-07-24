@@ -1,5 +1,4 @@
 :root { --p-blue: #1a4e8a; --p-border: #cbd5e1; --row-h: 32px; }
-.gantt-v35 { font-family: 'Segoe UI', Tahoma, sans-serif; font-size: 11px; width: 100%; padding: 10px; background: #fff; }
 .gt-header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
 .shot-title { font-weight: 800; color: #1a4e8a; font-size: 18px; margin: 0; }
 .gt-btn { padding: 8px 16px; border-radius: 6px; border: none; color: white; font-weight: 600; cursor: pointer; font-size: 11px; }
@@ -7,12 +6,10 @@
 .gt-btn-sync { background: #0f172a; margin-left: 8px; }
 .gt-controls-bar { display: flex; justify-content: space-between; margin-bottom: 10px; align-items: center; }
 .gt-filters { display: flex; gap: 15px; background: #f1f5f9; padding: 6px 15px; border-radius: 20px; font-weight: 700; border: 1px solid #ddd; }
-.gt-btn-nav { border: 1px solid var(--p-border); background: #fff; padding: 5px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+.gt-btn-nav { border: 1px solid var(--p-border); background: #fff; padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 12px;}
 .gt-month-label { font-weight: 800; color: #1e40af; font-size: 12px; margin: 0 15px; }
 
 .gt-main-container { display: flex; border: 1px solid var(--p-border); border-radius: 4px; overflow: hidden; background: #fff; }
-.gt-side-left { flex: 1; overflow-x: auto; border-right: 2px solid #1a4e8a; }
-.gt-side-right { flex: 0 0 558px; overflow-x: auto; background: #fbfcfd; }
 
 .gt-table-fixed { width: 100%; border-collapse: collapse; table-layout: fixed; }
 .gt-table-fixed th, .gt-table-fixed td { height: var(--row-h) !important; box-sizing: border-box; border: 1px solid var(--p-border); padding: 0 6px !important; vertical-align: middle; }
@@ -21,8 +18,8 @@
 .day-col { width: 18px !important; min-width: 18px !important; text-align: center !important; font-size: 9px; border-right: 1px solid #f1f5f9 !important; }
 .gt-cell-rel { position: relative; overflow: visible !important; padding: 0 !important; }
 .st-badge { display: inline-block; padding: 2px 6px; border-radius: 10px; font-size: 9px; font-weight: 800; text-transform: uppercase; }
-.ind-1 { border-left: 4px solid #3b82f6 !important; padding-left: 12px !important; font-weight: 600; color: #1e40af; }
-.ind-2 { padding-left: 30px !important; font-style: italic; color: #64748b; }
+.ind-1 { border-left: 4px solid #1a4e8a !important; padding-left: 12px !important; font-weight: 600; color: #1e40af; }
+.ind-2 { padding-left: 30px !important; font-style: italic; color: #64748b; font-size: 7px;}
 .btn-plus { background: #1a4e8a; color: #fff; border: none; padding: 1px 4px; border-radius: 3px; font-size: 8px; cursor: pointer; }
 
 
@@ -45,13 +42,6 @@
     table-layout: fixed; /* Bắt buộc để colgroup hoạt động */
 }
 
-/* Cho phép xuống dòng ở cột mô tả */
-.col-desc-flex { 
-    white-space: normal !important; 
-    word-wrap: break-word; 
-    line-height: 1.4 !important;
-    text-align: left !important;
-}
 
 /* Các ô khác giữ nguyên để không bị lệch hàng */
 .gt-table-fixed td { 
@@ -96,4 +86,67 @@
     color: #333333;             /* Chữ đen rõ ràng */
     font-weight: normal;
     text-transform: none;       /* Trở về chữ thường trong menu cho dễ đọc */
+}
+
+/* --- TỐI ƯU HÓA CHO MOBILE & IPAD --- */
+
+/* Cho phép cuộn mượt mà trên thiết bị cảm ứng (iOS/Android) */
+.gt-side-left, 
+.gt-side-right {
+    -webkit-overflow-scrolling: touch;
+    overflow-x: auto;
+}
+
+/* Đảm bảo khung chứa chính không bị tràn màn hình */
+.gantt-v35 {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* Responsive cho thanh công cụ (Controls & Header) trên mobile */
+@media (max-width: 1024px) {
+    .gt-header-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .gt-controls-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .gt-filters {
+        width: 100%;
+        box-sizing: border-box;
+        justify-content: space-between;
+    }
+
+    .shot-title {
+        font-size: 14px;
+    }
+
+    /* Trên mobile, có thể thu nhỏ chiều rộng cố định của bảng Gantt phải một chút nếu cần */
+    .gt-side-right {
+        flex: 0 0 320px; /* Thu gọn khung nhìn timeline trên màn hình nhỏ */
+    }
+}
+
+/* Thêm thanh cuộn (Scrollbar) đẹp và dễ nhìn hơn trên mobile/tablet */
+.gt-side-left::-webkit-scrollbar,
+.gt-side-right::-webkit-scrollbar {
+    height: 6px;
+    width: 6px;
+}
+
+.gt-side-left::-webkit-scrollbar-thumb,
+.gt-side-right::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+.gt-side-left::-webkit-scrollbar-track,
+.gt-side-right::-webkit-scrollbar-track {
+    background: #f1f5f9;
 }
