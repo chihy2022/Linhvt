@@ -19,10 +19,9 @@
 .gt-cell-rel { position: relative; overflow: visible !important; padding: 0 !important; }
 .st-badge { display: inline-block; padding: 2px 6px; border-radius: 10px; font-size: 9px; font-weight: 800; text-transform: uppercase; }
 .ind-1 { border-left: 4px solid #1a4e8a !important; padding-left: 12px !important; font-weight: 600; color: #1e40af; }
-.ind-2 { padding-left: 30px !important; font-style: italic; color: #64748b; font-size: 7px;}
+.ind-2 { padding-left: 30px !important; font-style: italic; color: #64748b; font-size: 7px;white-space: pre-wrap !important; word-wrap: break-word; word-break: break-word;}
+.ind-3 { padding-left: 30px !important; white-space: pre-wrap !important; word-wrap: break-word; word-break: break-word;}
 .btn-plus { background: #1a4e8a; color: #fff; border: none; padding: 1px 4px; border-radius: 3px; font-size: 8px; cursor: pointer; }
-
-
 /* Đảm bảo thanh bar luôn nằm giữa hàng dù hàng có cao lên */
 .gt-bar { 
     position: absolute; 

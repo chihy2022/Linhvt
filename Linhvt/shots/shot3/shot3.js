@@ -82,7 +82,7 @@ function renderGanttV37() {
     window.gData.forEach((item, idx) => {
         if ((item.type==='project' && !fP) || (item.type==='task' && !fT) || (item.type==='detail' && !fD)) return;
         
-        const indent = item.type==='project' ? 'ind-1' : (item.type==='detail' ? 'ind-2' : '');
+        const indent = item.type==='project' ? 'ind-1' : (item.type==='detail' ? 'ind-2' : 'ind-3');
         
         // FIX: Tên hàm gọi trong HTML phải khớp với window.addT37/addD37
         const btnT = (item.type === 'project') 
